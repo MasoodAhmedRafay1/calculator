@@ -1,0 +1,17 @@
+default:
+  image: docker:latest
+  before_script:
+    - gcloud auth activate-service-account --key-file $GCP_SERVICE_KEY
+    - gcloud config set project $GCP_PROJECT_ID
+
+    
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+    - gcloud builds submit . --config=cloudbuild.yaml

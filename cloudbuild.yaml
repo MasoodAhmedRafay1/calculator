@@ -1,0 +1,11 @@
+# File: cloudbuild.yaml
+steps:
+    # build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/gap-cloudbuild-calc/calc-app', '.' ]
+    # push the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/gap-cloudbuild-calc/calc-app']
+    #deploy to cloud run
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ['run', 'deploy', 'calc-v2', '--image', 'gcr.io/gap-cloudbuild-calc/calc-app', '--region', 'europe-west4', '--platform', 'managed', '--allow-unauthenticated']
